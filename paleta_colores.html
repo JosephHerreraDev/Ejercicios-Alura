@@ -1,0 +1,81 @@
+<style>
+  #pincel {
+    position: relative;
+    z-index: 1;
+  }
+  #lienso {
+    position: relative;
+    z-index: 4;
+    margin-left: -604;
+  }
+</style>
+
+<canvas id="pincel" width="600" height="400"></canvas>
+<canvas id="lienso" width="600" height="350"></canvas>
+
+<script>
+  var pantalla = document.getElementById("pincel");
+  var pincel = pantalla.getContext("2d");
+
+  var pantallaLienso = document.getElementById("lienso");
+  var lienso = pantallaLienso.getContext("2d");
+
+  pincel.fillStyle = "lightgray";
+  pincel.fillRect(0, 0, 600, 400);
+
+  lienso.fillStyle = "gray";
+  lienso.fillRect(0, 0, 600, 350);
+
+  pincel.fillStyle = "red";
+  pincel.fillRect(0, 0, 50, 50);
+
+  pincel.fillStyle = "green";
+  pincel.fillRect(50, 0, 50, 50);
+
+  pincel.fillStyle = "blue";
+  pincel.fillRect(100, 0, 50, 50);
+
+  var color = "blue";
+
+  var puedoDibujar = false;
+
+  function dibujarCirculo(evento) {
+    if (puedoDibujar) {
+      var x = evento.pageX - pantallaLienso.offsetLeft;
+      var y = evento.pageY - pantallaLienso.offsetTop;
+      lienso.fillStyle = color;
+      lienso.beginPath();
+      lienso.arc(x, y, 5, 0, 2 * 3.14);
+      lienso.fill();
+    }
+  }
+
+  pantallaLienso.onmousemove = dibujarCirculo;
+
+  function habilitarDibujar() {
+    puedoDibujar = true;
+  }
+
+  function deshabilitarDibujar() {
+    puedoDibujar = false;
+  }
+
+  function cambiarColor(evento) {
+    var x = evento.pageX - pantalla.offsetLeft;
+    var y = evento.pageY - pantalla.offsetTop;
+
+    if (x <= 50) {
+      color = "red";
+    } else if (x <= 100) {
+      color = "green";
+    } else if (x <= 150) {
+      color = "blue";
+    }
+  }
+
+  pantalla.onmousedown = cambiarColor;
+
+  pantallaLienso.onmousedown = habilitarDibujar;
+
+  pantallaLienso.onmouseup = deshabilitarDibujar;
+</script>
